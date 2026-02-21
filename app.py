@@ -43,34 +43,7 @@ def send_video(chat_id, video_url):
 @app.route("/", methods=["POST"])
 def webhook():
     data = request.json
-    message = data.get("message")
-
-    if not message:
-        return "ok"
-
-    text = message.get("text", "")
-    chat_id = message["chat"]["id"]
-
-   if "/soft" in text:
-    parts = text.replace("\n", " ").split(" ")
-    reddit_url = None
-
-    for part in parts:
-        if part.startswith("http"):
-            reddit_url = part
-            break
-
-    if reddit_url:
-        print("Extracting:", reddit_url)
-        video_url = extract_video_url(reddit_url)
-
-        if video_url:
-            print("Sending video:", video_url)
-            send_video(chat_id, video_url)
-        else:
-            print("Extraction failed")
-
+    print("FULL UPDATE:", data)
     return "ok"
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
