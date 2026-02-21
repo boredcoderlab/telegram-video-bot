@@ -42,8 +42,15 @@ def send_video(chat_id, video_url):
 
 @app.route("/", methods=["POST"])
 def webhook():
-    data = request.json
-    print("FULL UPDATE:", data)
+    raw_data = request.get_data()
+    print("RAW BODY:", raw_data)
+
+    try:
+        json_data = request.get_json(force=True)
+        print("PARSED JSON:", json_data)
+    except Exception as e:
+        print("JSON PARSE ERROR:", e)
+
     return "ok"
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
