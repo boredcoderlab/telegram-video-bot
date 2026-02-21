@@ -51,13 +51,24 @@ def webhook():
     text = message.get("text", "")
     chat_id = message["chat"]["id"]
 
-    if text.startswith("/soft"):
-        parts = text.split(" ", 1)
-        if len(parts) == 2:
-            reddit_url = parts[1]
-            video_url = extract_video_url(reddit_url)
-            if video_url:
-                send_video(chat_id, video_url)
+   if "/soft" in text:
+    parts = text.replace("\n", " ").split(" ")
+    reddit_url = None
+
+    for part in parts:
+        if part.startswith("http"):
+            reddit_url = part
+            break
+
+    if reddit_url:
+        print("Extracting:", reddit_url)
+        video_url = extract_video_url(reddit_url)
+
+        if video_url:
+            print("Sending video:", video_url)
+            send_video(chat_id, video_url)
+        else:
+            print("Extraction failed")
 
     return "ok"
 
