@@ -40,16 +40,22 @@ def send_video(chat_id, video_url):
         }
     )
 
+import sys
+
 @app.route("/", methods=["POST"])
 def webhook():
     raw_data = request.get_data()
+
     print("RAW BODY:", raw_data)
+    sys.stdout.flush()
 
     try:
         json_data = request.get_json(force=True)
         print("PARSED JSON:", json_data)
+        sys.stdout.flush()
     except Exception as e:
         print("JSON PARSE ERROR:", e)
+        sys.stdout.flush()
 
     return "ok"
 if __name__ == "__main__":
