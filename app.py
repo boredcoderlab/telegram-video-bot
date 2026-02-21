@@ -11,14 +11,23 @@ TELEGRAM_API = f"https://api.telegram.org/bot{BOT_TOKEN}"
 def extract_video_url(url):
     try:
         result = subprocess.run(
-            ["yt-dlp", "-g", url],
+            ["python", "-m", "yt_dlp", "-g", url],
             capture_output=True,
             text=True,
             timeout=60
         )
+
+        print("STDOUT:", result.stdout)
+        print("STDERR:", result.stderr)
+
+        if result.returncode != 0:
+            return None
+
         video_url = result.stdout.strip().split("\n")[0]
         return video_url
-    except Exception:
+
+    except Exception as e:
+        print("ERROR:", e)
         return None
 
 def send_video(chat_id, video_url):
